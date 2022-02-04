@@ -1,48 +1,82 @@
+from __future__ import print_function
 import gdown
-import numpy as np
+import pandas as pd
 import yagmail
+import os
 
-# download file from Google Drive
-url = 'https://drive.google.com/drive/u/0/folders/11TknJKxqUFIsDArJnZMgNmQatJ90IdD0'
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 
-output = 'MBTI_500.csv'
+# If modifying these scopes, delete the file token.json.
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
-gdown.download(url, output, quiet=False)
 
-# read data
+def main():
+  # download file from Google Drive
+  url = 'https://drive.google.com/uc?id=1NKRKSa5rceRJDgKFvaaEa5RM9sE-osJc'
 
-# turn data into a list
+  output = 'MBTI_500.csv'
+  
+  if not os.path.exists("MBTI_500.csv"):
+    gdown.download(url, output, quiet=False)
 
-# connect to Google Sheet
-# credentials = GoogleCredentials.get_application_default()
-# service = build('sheets', 'v4', credentials=credentials)
+  # read data
+  csv_df = pd.read_csv('MBTI_500.csv')
+  csv_list = csv_df.to_numpy().tolist()
+  cleaned_csv_list = [x for x in csv_list if str(x) != 'nan']
 
-# # add list to the sheet
-# list = [["valuea1"], ["valuea2"], ["valuea3"]]
-# resource = {
-#   "majorDimension": "ROWS",
-#   "values": list
-# }
-# spreadsheetId = "### spreadsheet ID"
-# range = "Sheet1!A:A";
-# service.spreadsheets().values().append(
-#   spreadsheetId=spreadsheetId,
-#   range=range,
-#   body=resource,
-#   valueInputOption="USER_ENTERED"
-# ).execute()
+  # send data to Google Sheet
+  creds = None
+  
+  if os.path.exists('token.json'):
+      creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+      
+  if not creds or not creds.valid:
+      if creds and creds.expired and creds.refresh_token:
+          creds.refresh(Request())
+      else:
+          flow = InstalledAppFlow.from_client_secrets_file(
+              'credentials.json', SCOPES)
+          creds = flow.run_local_server(port=0)
+      # Save the credentials for the next run
+      with open('token.json', 'w') as token:
+          token.write(creds.to_json())
 
-# # delete file
+  try:
+      service = build('sheets', 'v4', credentials=creds)
 
-# # send notification email
-# receiver = "your@gmail.com"
-# body = "Hello there from Yagmail"
-# filename = "document.pdf"
+      body = {
+          'values': cleaned_csv_list
+      }
+      
+      result = service.spreadsheets().values().update(
+          spreadsheetId="1ncW3izSMqBbECbOJkXoDpEwLc1bbZAQmjXCTBhPRDu8", range="Sheet1",
+          valueInputOption="RAW", body=body).execute()
+      
+      print('{0} cells updated.'.format(result.get('updatedCells')))
+  except HttpError as err:
+      print(err)
 
-# yag = yagmail.SMTP("my@gmail.com")
-# yag.send(
-#     to=receiver,
-#     subject="Yagmail test with attachment",
-#     contents=body, 
-#     attachments=filename,
-# )
+  # send notification email
+  receiver = "test@gmail.com"
+  body = "Check out the updated spreadsheet and let me know what you think."
+
+  yag = yagmail.SMTP("my@gmail.com")
+  yag.send(
+      to=receiver,
+      subject="That spreadsheet has been updated",
+      contents=body
+  )
+  
+  # delete file
+  if os.path.exists("MBTI_500.csv"):
+    os.remove("MBTI_500.csv")
+  else:
+    print("The downloaded file does not exist")
+    
+    
+if __name__ == '__main__':
+    main()

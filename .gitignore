@@ -1,1 +1,5 @@
 .venv
+.vscode
+MBTI_500.csv
+token.json
+credentials.json
