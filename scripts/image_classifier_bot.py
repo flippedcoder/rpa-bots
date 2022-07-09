@@ -1,11 +1,13 @@
 import requests
 import pandas as pd
 import yagmail
-import wget
 import shutil
 
-# get new image from Cloudinary
+from keras.applications.vgg16 import VGG16, preprocess_input, decode_predictions
+from keras.preprocessing import image
+import numpy as np
 
+# get new image from Cloudinary
 image_url = "https://res.cloudinary.com/milecia/image/upload/v1625834860/test0/fmgidql8t2id8wxomghl.png"
 filename = image_url.split("/")[-1]
 
@@ -26,12 +28,33 @@ else:
     print("Image could not be retreived")
 
 
-# run through model to determine what it is
+model = VGG16(weights="imagenet")
+
+# image loaded in PIL (Python Imaging Library)
+img = image.load_img(filename, color_mode="rgb", target_size=(224, 224))
+
+# Converts a PIL Image to 3D Numpy Array
+x = image.img_to_array(img)
+
+# Adding the fouth dimension, for number of images
+x = np.expand_dims(x, axis=0)
+
+x = preprocess_input(x)
+
+features = model.predict(x)
+
+predictions = decode_predictions(features)[0]
+predictions.sort(key=lambda x: x[2])
+
+predicted_classification = predictions[-1][1]
 
 # move image to correct folder with appropriate label
+if predicted_classification == True:
+    shutil.move(filename, "rejected")
+else:
+    shutil.move(filename, "accepted")
 
 # send email about unidentified images
-
 receiver = "test@gmail.com"
 body = "See if you can figure out what these images are. The model missed them."
 filename = "f{filename}.png"
