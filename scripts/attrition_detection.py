@@ -1,9 +1,9 @@
 import pandas as pd
+import yagmail
 from sklearn.ensemble import RandomForestClassifier
 
 # read data (https://www.kaggle.com/datasets/aryashah2k/datasets-in-hr-analytics-applied-ai?resource=download&select=employee_course_ratings.csv)
 employee_attrition_df = pd.read_csv("employee_attrition.csv")
-employee_course_ratings_df = pd.read_csv("employee_course_ratings.csv")
 
 # break data into train and test datasets
 train_ds = employee_attrition_df.sample(frac=0.8, random_state=25)
@@ -26,10 +26,11 @@ test_prediction = model.predict(test_ds)
 print(test_prediction)
 
 # get the list into the right format
+employee_id_list = test_prediction["EmployeeID"]
 
 # send an email
 receiver = "test@gmail.com"
-body = "Check out the updated spreadsheet and let me know what you think."
+body = f"Check out this list and let me know what you think. {employee_id_list}"
 
 yag = yagmail.SMTP("my@gmail.com")
 yag.send(to=receiver, subject="That spreadsheet has been updated", contents=body)

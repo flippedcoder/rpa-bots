@@ -13,8 +13,6 @@ first_annots = []
 
 rec = page1.first_annot.rect
 
-rec
-
 # Information of words in first object is stored in mywords
 
 mywords = [w for w in words if fitz.Rect(w[:4]) in rec]
@@ -119,9 +117,10 @@ for i in range(0, len(values)):
 report = dict(zip(keys, values))
 
 dic = [
-    report["LOCALITY"],
-    report["MANNER OF CRASH COLLISION/IMPACT"],
-    report["CRASH SEVERITY"],
+    report["NAME"],
+    report["BUSINESS NAME"],
+    report["SOCIAL SECURITY NUMBER"],
+    report["EMPLOYER IDENTIFICATION NUMBER"],
 ]
 
 l = 0
@@ -169,9 +168,9 @@ for local in dic:
             val_after.append(extract)
             break
 
-    report["LOCALITY"] = val_after[0]
-    report["MANNER OF CRASH COLLISION/IMPACT"] = val_after[1]
-    report["CRASH SEVERITY"] = val_after[2]
+    report["NAME"] = val_after[0]
+    report["BUSINESS NAME"] = val_after[1]
+    report["SOCIAL SECURITY NUMBER"] = val_after[2]
 
 data = pd.DataFrame.from_dict(report)
 

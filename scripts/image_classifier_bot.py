@@ -1,14 +1,15 @@
+import numpy as np
 import requests
 import pandas as pd
-import yagmail
 import shutil
+import yagmail
 
 from keras.applications.vgg16 import VGG16, preprocess_input, decode_predictions
 from keras.preprocessing import image
-import numpy as np
 
 # get new image from Cloudinary
 image_url = "https://res.cloudinary.com/milecia/image/upload/v1625834860/test0/fmgidql8t2id8wxomghl.png"
+
 filename = image_url.split("/")[-1]
 
 # Open the url image, set stream to True, this will return the stream content.
@@ -57,12 +58,12 @@ else:
 # send email about unidentified images
 receiver = "test@gmail.com"
 body = "See if you can figure out what these images are. The model missed them."
-filename = "f{filename}.png"
+filename = f"{filename}.png"
 
 yag = yagmail.SMTP("my@gmail.com")
 yag.send(
     to=receiver,
-    subject="Unlabeled images",
+    subject="Defective product images",
     contents=body,
     attachments=filename,
 )
