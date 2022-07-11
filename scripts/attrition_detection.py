@@ -28,3 +28,8 @@ print(test_prediction)
 # get the list into the right format
 
 # send an email
+receiver = "test@gmail.com"
+body = "Check out the updated spreadsheet and let me know what you think."
+
+yag = yagmail.SMTP("my@gmail.com")
+yag.send(to=receiver, subject="That spreadsheet has been updated", contents=body)

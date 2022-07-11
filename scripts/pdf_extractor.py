@@ -1,8 +1,6 @@
 import fitz
 import pandas as pd
 
-# https://www.analyticsvidhya.com/blog/2021/06/data-extraction-from-unstructured-pdfs/#:~:text=There%20are%20a%20couple%20of,PDFs%20through%20the%20Camelot%20library.
-
 doc = fitz.open("example_w9.pdf")
 
 page1 = doc[0]
