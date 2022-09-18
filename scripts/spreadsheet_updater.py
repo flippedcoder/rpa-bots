@@ -15,7 +15,7 @@ SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 
 def main():
-    # download file from Google Drive
+    # download file from Google Drive (you can download this file manually as well)
     url = "https://drive.google.com/uc?id=1NKRKSa5rceRJDgKFvaaEa5RM9sE-osJc"
 
     output = "MBTI_500.csv"
@@ -77,6 +77,22 @@ def main():
         os.remove("MBTI_500.csv")
     else:
         print("The downloaded file does not exist")
+
+    # ID of channel you want to post message to
+    channel_id = "C01JASD6802"
+
+    try:
+        # Call the conversations.list method using the WebClient
+        result = client.chat_postMessage(
+            channel=channel_id,
+            text="Hello world!"
+            # You could also use a blocks[] array to send richer content
+        )
+        # Print result, which includes information about the message (like TS)
+        print(result)
+
+    except SlackApiError as e:
+        print(f"Error: {e}")
 
 
 if __name__ == "__main__":

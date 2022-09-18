@@ -10,7 +10,7 @@ train_ds = employee_attrition_df.sample(frac=0.8, random_state=25)
 test_ds = employee_attrition_df.drop(train_ds.index)
 
 # get the value we want to predict from the train dataset
-attrition_label = train_ds[7]
+attrition_label = train_ds["Attrition"]
 modified_train_ds = train_ds.drop(attrition_label)
 
 # build model

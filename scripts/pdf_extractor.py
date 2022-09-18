@@ -87,7 +87,7 @@ for i in range(0, len(cont)):
 
         j = j.strip()
 
-        # print(j)
+        print(j)
 
         lis.append(j)
 

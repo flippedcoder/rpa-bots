@@ -27,6 +27,7 @@ if r.status_code == 200:
     print("Image sucessfully downloaded: ", filename)
 else:
     print("Image could not be retreived")
+    exit()
 
 
 model = VGG16(weights="imagenet")
@@ -50,20 +51,20 @@ predictions.sort(key=lambda x: x[2])
 predicted_classification = predictions[-1][1]
 
 # move image to correct folder with appropriate label
-if predicted_classification == True:
+if predicted_classification == "daisy":
     shutil.move(filename, "rejected")
+
+    # send email about unidentified images
+    receiver = "test@gmail.com"
+    body = "See if you can figure out what these images are. The model missed them."
+    filename = f"{filename}.png"
+
+    yag = yagmail.SMTP("my@gmail.com")
+    yag.send(
+        to=receiver,
+        subject="Defective product images",
+        contents=body,
+        attachments=filename,
+    )
 else:
     shutil.move(filename, "accepted")
-
-# send email about unidentified images
-receiver = "test@gmail.com"
-body = "See if you can figure out what these images are. The model missed them."
-filename = f"{filename}.png"
-
-yag = yagmail.SMTP("my@gmail.com")
-yag.send(
-    to=receiver,
-    subject="Defective product images",
-    contents=body,
-    attachments=filename,
-)
