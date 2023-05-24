@@ -1,6 +1,20 @@
 import pandas as pd
-import yagmail
 from sklearn.ensemble import RandomForestClassifier
+
+# open Google drive in the browser via the bookmark icon
+# click on the spreadsheet
+# click File
+# click Download
+# click .csv
+# save the csv to the correct folder
+# read in the csv data
+# run the data through the ML model
+# create a list of labeled employees
+# save the data as a csv with a new title
+# open Google drive again
+# go to the file in finder
+# drag the new csv to Gdrive
+
 
 # read data (https://www.kaggle.com/datasets/aryashah2k/datasets-in-hr-analytics-applied-ai?resource=download&select=employee_course_ratings.csv)
 employee_attrition_df = pd.read_csv("employee_attrition.csv")
@@ -27,10 +41,3 @@ print(test_prediction)
 
 # get the list into the right format
 employee_id_list = test_prediction["EmployeeID"]
-
-# send an email
-receiver = "test@gmail.com"
-body = f"Check out this list and let me know what you think. {employee_id_list}"
-
-yag = yagmail.SMTP("my@gmail.com")
-yag.send(to=receiver, subject="That spreadsheet has been updated", contents=body)

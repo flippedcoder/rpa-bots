@@ -7,8 +7,23 @@ import yagmail
 from keras.applications.vgg16 import VGG16, preprocess_input, decode_predictions
 from keras.preprocessing import image
 
+# navigate to cloudinary in the browser
+# open the folder with the unlabeled images
+# click copy url on the first image
+# use the url to download the image to a specific folder
+# use the ML model to classify the image
+# go to the image folder
+# right click the image and rename it to the classification
+# click on browser to go back to cloudinary
+# click the checkmark on the first image
+# navigate to the delete button
+# click delete
+# click delete in the confirmation modal
+# show where users would come in and move the images to different folders based on their label
+
+
 # get new image from Cloudinary
-image_url = "https://res.cloudinary.com/milecia/image/upload/v1625834860/test0/fmgidql8t2id8wxomghl.png"
+image_url = "https://res.cloudinary.com/milecia/image/upload/v1682371328/map-shots/p3on4hxuiyscyjob38qo.jpg"
 
 filename = image_url.split("/")[-1]
 
