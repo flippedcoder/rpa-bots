@@ -1,21 +1,6 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 
-# open Google drive in the browser via the bookmark icon
-# click on the spreadsheet
-# click File
-# click Download
-# click .csv
-# save the csv to the correct folder
-# read in the csv data
-# run the data through the ML model
-# create a list of labeled employees
-# save the data as a csv with a new title
-# open Google drive again
-# go to the file in finder
-# drag the new csv to Gdrive
-
-
 # read data (https://www.kaggle.com/datasets/aryashah2k/datasets-in-hr-analytics-applied-ai?resource=download&select=employee_course_ratings.csv)
 employee_attrition_df = pd.read_csv("employee_attrition.csv")
 
